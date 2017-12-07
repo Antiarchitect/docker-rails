@@ -12,7 +12,7 @@ docker build . --tag my-rails-dev --build-arg uid=${UID}
 
 If you have no Rails project yet and need `rails new` at least:
 ```bash
-docker build . --tag my-rails-dev-bootstrap --build-arg uid=${UID} --build-arg bundle_path=/bundle --build-arg rails_version=5.1.4
+docker build . --tag my-rails-dev-bootstrap --build-arg uid=${UID} --build-arg rails_version=5.1.4
 ```
 Little bit ugly for now, but we're working on it...
 
@@ -47,18 +47,26 @@ docker run --rm -v $(pwd):/service:Z my-rails-dev-bootstrap rails new testapp-my
 
 ## Working in existing app
 
-If running the container first time just run run `bundle install`:
+If newly created application, please remove `tzinfo-data` gem requirement from your Gemfile if any. As we are running
+inside a linux container we do not need it.
+
+**Important!** If running the container first time just configure bundle location:
 ```bash
-docker run -it --rm -v $(pwd):/service:Z my-rails-dev bundle install
+docker run --rm -v $(pwd):/service:Z my-rails-dev bundle config --local path ./vendor/bundle
 ```
-Or you can do it from the shell by hand. Bundle will install all the gems in `.bundle` directory inside your Rails
+and run `bundle install`:
+```bash
+docker run --rm -v $(pwd):/service:Z my-rails-dev bundle install
+```
+Or you can do it from the shell by hand. Bundle will install all the gems in `vendor/bundle` directory inside your Rails
 project. As dev container will constantly up and go we should preserve installed gems somewhere in your workdir.
 
-**!!! Do not forget to add `.bundle` directory to your `.gitignore` - gems are not needed in your codebase.**
+**Important!** Do not forget to add `.bundle` and `vendor/bundle` directories to your `.gitignore` - 
+gems are not needed in your git repo.
 
 In order to get access to the shell:
 ```bash
 docker run -it --rm -v $(pwd):/service:Z my-rails-dev /bin/sh
 ```
-All usual commands (rails c, rake ...) will be available.
+All commands (rails c, rake ...) will be available just right after your obtain the shell.
 

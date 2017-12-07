@@ -13,26 +13,12 @@ RUN apk add --no-cache \
     mariadb-dev \
     nodejs
 
-ARG workdir=/service
-WORKDIR ${workdir}
-
-ARG rails_version
-RUN [ "x${rails_version}" = "x" ] || mkdir /bundle
-
-# Use --build-arg bundle_path=/bundle for bootstrapping.
-ARG bundle_path=${workdir}/.bundle
+WORKDIR /service
 
 # Conditional user change for Dev
 ARG uid
 RUN [ "x${uid}" = "x" ] || adduser -D -u ${uid} dev
-RUN [ "x${rails_version}" = "x" ] || chown ${uid} /bundle
 USER ${uid:-${UID}}
 
-## Proper env var settings
-ENV GEM_HOME=${bundle_path}
-ENV BUNDLE_APP_CONFIG=${GEM_HOME}
-ENV BUNDLE_PATH=${GEM_HOME}
-ENV BUNDLE_BIN=${GEM_HOME}/bin
-ENV PATH="${BUNDLE_BIN}:${PATH}"
-
+ARG rails_version
 RUN [ "x${rails_version}" = "x" ]  || gem install rails -v ${rails_version} --no-document
