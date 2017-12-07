@@ -47,11 +47,18 @@ docker run --rm -v $(pwd):/service:Z my-rails-dev-bootstrap rails new testapp-my
 
 ## Working in existing app
 
+If running the container first time just run run `bundle install`:
+```bash
+docker run -it --rm -v $(pwd):/service:Z my-rails-dev bundle install
+```
+Or you can do it from the shell by hand. Bundle will install all the gems in `.bundle` directory inside your Rails
+project. As dev container will constantly up and go we should preserve installed gems somewhere in your workdir.
+
+**!!! Do not forget to add `.bundle` directory to your `.gitignore` - gems are not needed in your codebase.**
+
 In order to get access to the shell:
 ```bash
 docker run -it --rm -v $(pwd):/service:Z my-rails-dev /bin/sh
 ```
-
-If running the container first time run `bundle install` first when inside. You can use this  
-
+All usual commands (rails c, rake ...) will be available.
 
