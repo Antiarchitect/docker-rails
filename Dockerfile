@@ -1,6 +1,8 @@
+# Development variant of Dockerfile. Do not use for deployments.
 FROM ruby:2.4.2-alpine3.6
+LABEL maintainer="Antiarchitect <voronkovaa@gmail.com>"
 
-LABEL maintainer "Antiarchitect <voronkovaa@gmail.com>"
+ARG uid
 
 WORKDIR /service
 
@@ -14,11 +16,8 @@ RUN apk add --no-cache \
     postgresql-dev \
     mariadb-dev
 
-RUN gem install rails -v 5.1.4 --no-document
+RUN [ "x${uid}" = "x" ] || addgroup -g ${uid} dev
+RUN [ "x${uid}" = "x" ] || adduser -D -u ${uid} -G dev dev
+USER ${uid:-$UID}:${uid:-$UID}
 
-#RUN apk add --no-cache \
-#    postgresql-client \
-#    libpq \
-#    nodejs \
-#    tzdata
-#RUN apk del .build-deps
+RUN gem install rails -v 5.1.4 --no-document
