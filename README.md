@@ -1,4 +1,6 @@
-# docker-rails
+# Developing rails applications using docker
+
+## docker-rails
 Docker Rails image for development purposes, based on Alpine Linux
 
 # Building
