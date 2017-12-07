@@ -1,4 +1,4 @@
-# Development variant of Dockerfile. Do not use for deployments.
+# One Dockerfile for Prod and Dev environments. See build instructions in README.md.
 FROM ruby:2.4.2-alpine3.6
 LABEL maintainer="Antiarchitect <voronkovaa@gmail.com>"
 
