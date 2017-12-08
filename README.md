@@ -1,7 +1,9 @@
 # Developing rails applications using docker
 
 ## docker-rails
-Docker Rails image for development purposes, based on Alpine Linux
+Docker Rails image for development purposes, based on Alpine Linux. Feel free to modify this file in your real project
+or use your own set of Dockerfiles. The purpose of this to provide one Dockerfile for Bootstrapping, Development and
+Production at the start of your project.
 
 # Building
 
@@ -52,7 +54,7 @@ docker run --rm -v $(pwd):/service:Z my-rails-dev-bootstrap rails new testapp-my
 If newly created application, please remove `tzinfo-data` gem requirement from your Gemfile if any. As we are running
 inside a linux container we do not need it.
 
-**Important!** If running the container first time just configure bundle location:
+**Important!** If running the container first time you should properly configure bundle location:
 ```bash
 docker run --rm -v $(pwd):/service:Z my-rails-dev bundle config --local path ./vendor/bundle
 ```
@@ -60,8 +62,8 @@ and run `bundle install`:
 ```bash
 docker run --rm -v $(pwd):/service:Z my-rails-dev bundle install
 ```
-Or you can do it from the shell by hand. Bundle will install all the gems in `vendor/bundle` directory inside your Rails
-project. As dev container will constantly up and go we should preserve installed gems somewhere in your workdir.
+Bundle will install all the gems in `vendor/bundle` directory inside your Rails project.
+As dev container will constantly up and go we should preserve installed gems somewhere in your workdir.
 
 **Important!** Do not forget to add `.bundle` and `vendor/bundle` directories to your `.gitignore` - 
 gems are not needed in your git repo.
