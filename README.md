@@ -51,12 +51,9 @@ docker run --rm -v $(pwd):/service:Z my-rails-dev-bootstrap rails new testapp-my
 
 ## Working in existing app
 
-If newly created application, please remove `tzinfo-data` gem requirement from your Gemfile if any. As we are running
-inside a linux container we do not need it.
-
 **Important!** If running the container first time you should properly configure bundle location:
 ```bash
-docker run --rm -v $(pwd):/service:Z my-rails-dev bundle config --local path ./vendor/bundle
+docker run --rm -v $(pwd):/service:Z my-rails-dev sh -c "bundle config --local path ./vendor/bundle; bundle config --local bin ./vendor/bundle/bin"
 ```
 and run `bundle install`:
 ```bash
