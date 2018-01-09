@@ -15,14 +15,16 @@ RUN apk add --no-cache \
     tzdata
 
 ARG gemdev
-RUN [ "x${gemdev}" = "x" ] || apk add --no-cache git
+RUN [[ "x${gemdev}" = "x" ]] || apk add --no-cache git
 
 ARG workdir="/service"
 WORKDIR ${workdir}
 
 # Conditional user change for Dev
+ARG gid
 ARG uid
-RUN [ "x${uid}" = "x" ] || adduser -D -u ${uid} dev
+RUN [[ "x${gid}" = "x" ]] || addgroup -g ${gid} -S dev
+RUN [[ "x${gid}" = "x" || "x${uid}" = "x" ]] || adduser -u ${uid} -g ${gid} -S dev
 USER ${uid:-${UID}}
 
 # Local project binaries
@@ -30,4 +32,4 @@ ENV PATH="${workdir}/vendor/bundle/bin:${PATH}"
 ENV BUNDLE_APP_CONFIG="${workdir}/.bundle"
 
 ARG rails_version
-RUN [ "x${rails_version}" = "x" ] || gem install rails -v ${rails_version} --no-document
+RUN [[ "x${rails_version}" = "x" ]] || gem install rails -v ${rails_version} --no-document
