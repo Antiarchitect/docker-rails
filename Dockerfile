@@ -25,7 +25,7 @@ ARG gid
 ARG uid
 RUN [[ "x${gid}" = "x" ]] || sed -i "/:${gid}:/d" /etc/group
 RUN [[ "x${gid}" = "x" ]] || addgroup -g ${gid} -S dev
-RUN [[ "x${gid}" = "x" || "x${uid}" = "x" ]] || adduser -u ${uid} -G dev -D -H -S dev
+RUN [[ "x${gid}" = "x" || "x${uid}" = "x" ]] || adduser -u ${uid} -G dev -D -S dev
 USER ${uid:-${UID}}
 
 # Local project binaries
